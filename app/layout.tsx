@@ -1,8 +1,9 @@
-import '../app/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import { Providers } from './providers';
+import './globals.css'
 
-function RootLayout({ children }: { children: React.ReactNode }) {
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
@@ -11,5 +12,3 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
-
-export default RootLayout;

@@ -1,26 +1,20 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { useAccount } from 'wagmi';
-import ProjectTile from '../components/ProjectTile';
-import TentacleBackground from '../components/TentacleBackground';
+import { useState, useEffect, useCallback } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import TentacleBackground from '../components/TentacleBackground';
+import ProjectTile from '../components/ProjectTile';
 
 export default function HomePage() {
   const { address, isConnected } = useAccount();
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (isConnected && address) {
-      console.log('Wallet connected, attempting to save user');
-      saveUser(address);
-    }
-  }, [isConnected, address]);
+  const [userSaved, setUserSaved] = useState(false);
 
   const saveUser = useCallback(async (address: string) => {
-    if (isSaving) return;
+    if (isSaving || userSaved) return;
     setIsSaving(true);
     console.log('Saving user with address:', address);
 
@@ -35,8 +29,9 @@ export default function HomePage() {
       console.log('API response:', data);
       if (data.success) {
         console.log('User saved successfully');
+        setUserSaved(true);
       } else {
-        console.error('Failed to save user. Details:', data.details);
+        console.error('Failed to save user');
       }
     } catch (error) {
       console.error('Error saving user:', error);
@@ -45,6 +40,12 @@ export default function HomePage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (isConnected && address && !userSaved && !isSaving) {
+      console.log('Wallet connected, attempting to save user');
+      saveUser(address);
+    }
+  }, [isConnected, address, userSaved, isSaving, saveUser]);
   const projects = [
     { id: 1, title: 'Explore', link: '/projects/zora-explore' },
     { id: 2, title: 'Create', link: '/projects/zora-create' },
@@ -65,7 +66,7 @@ export default function HomePage() {
         <h1 className="text-6xl font-bold mb-4 text-white drop-shadow-lg">
           jello world
         </h1>
-        <p className="text-xl text-purple-200">
+        <p className="text-xl text-purple-200 mb-8">
           Connect your wallet and explore amazing projects
         </p>
       </motion.div>
@@ -76,7 +77,7 @@ export default function HomePage() {
         className="flex justify-center items-center gap-8 z-10"
       >
         {projects.map((project) => (
-          <Link key={project.id} href={project.link}>
+          <Link key={project.id} href={project.link} passHref>
             <ProjectTile project={project} />
           </Link>
         ))}
