@@ -10,8 +10,13 @@ const TentacleBackground: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const resizeCanvas = () => {
+      if (!canvas) return;  // Add this null check
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resizeCanvas();
 
     const tentacles: Tentacle[] = [];
     const numTentacles = 20;
@@ -47,11 +52,11 @@ const TentacleBackground: React.FC = () => {
         this.angle += (targetAngle - this.angle) * 0.1;
       }
 
-      draw() {
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.width;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
+      draw(context: CanvasRenderingContext2D) {
+        context.strokeStyle = this.color;
+        context.lineWidth = this.width;
+        context.beginPath();
+        context.moveTo(this.x, this.y);
 
         let prevX = this.x;
         let prevY = this.y;
@@ -62,7 +67,7 @@ const TentacleBackground: React.FC = () => {
           const x = prevX + Math.cos(segmentAngle) * segmentLength;
           const y = prevY + Math.sin(segmentAngle) * segmentLength;
 
-          ctx.quadraticCurveTo(
+          context.quadraticCurveTo(
             prevX + (x - prevX) * 0.5,
             prevY + (y - prevY) * 0.5,
             x,
@@ -73,7 +78,7 @@ const TentacleBackground: React.FC = () => {
           prevY = y;
         }
 
-        ctx.stroke();
+        context.stroke();
       }
     }
 
@@ -82,6 +87,8 @@ const TentacleBackground: React.FC = () => {
     }
 
     function animate() {
+      if (!ctx || !canvas) return;  // Add this null check
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Draw dark background
@@ -90,7 +97,7 @@ const TentacleBackground: React.FC = () => {
 
       tentacles.forEach((tentacle) => {
         tentacle.update();
-        tentacle.draw();
+        tentacle.draw(ctx);
       });
 
       requestAnimationFrame(animate);
@@ -99,8 +106,7 @@ const TentacleBackground: React.FC = () => {
     animate();
 
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      resizeCanvas();
     };
 
     const handleMouseMove = (event: MouseEvent) => {

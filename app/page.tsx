@@ -38,7 +38,7 @@ export default function HomePage() {
     } finally {
       setIsSaving(false);
     }
-  }, []);
+  }, [isSaving, userSaved]);
 
   useEffect(() => {
     if (isConnected && address && !userSaved && !isSaving) {

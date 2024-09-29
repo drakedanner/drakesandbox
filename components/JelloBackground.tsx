@@ -3,7 +3,7 @@
 import React from 'react';
 
 const BalancedShadedRectangles = () => {
-  const generateRectangles = (count, sizeRange, yRange) => {
+  const generateRectangles = (count: number, sizeRange: [number, number], yRange: [number, number]) => {
     const rects = [];
     const xStep = 100 / count;
     

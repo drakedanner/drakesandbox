@@ -15,11 +15,12 @@ if (!projectId) {
 const { connectors } = getDefaultWallets({
   appName: "drakesandbox",
   projectId: projectId,
-  chains: [mainnet, sepolia],
 });
 
+const chains = [mainnet, sepolia] as const;
+
 const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains,
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),
@@ -33,7 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider chains={[mainnet, sepolia]}>
+        <RainbowKitProvider>
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>

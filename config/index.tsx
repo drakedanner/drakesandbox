@@ -1,4 +1,3 @@
-
 // config/index.tsx
 
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
@@ -26,6 +25,6 @@ export const config = defaultWagmiConfig({
   ssr: true,
   storage: createStorage({
     storage: cookieStorage
-  }),
-  ...wagmiOptions // Optional - Override createConfig parameters
+  })
+  // Removed ...wagmiOptions
 })
