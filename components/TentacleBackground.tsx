@@ -13,10 +13,10 @@ const TentacleBackground: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let tentacles: Tentacle[] = [];
+    const tentacles: Tentacle[] = [];
     const numTentacles = 20;
 
-    let mouse = {
+    const mouse = {
       x: canvas.width / 2,
       y: canvas.height / 2,
     };

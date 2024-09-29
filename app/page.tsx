@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAccount } from 'wagmi';
 import ProjectTile from '../components/ProjectTile';
 import TentacleBackground from '../components/TentacleBackground';
@@ -19,7 +19,7 @@ export default function HomePage() {
     }
   }, [isConnected, address]);
 
-  const saveUser = async (address: string) => {
+  const saveUser = useCallback(async (address: string) => {
     if (isSaving) return;
     setIsSaving(true);
     console.log('Saving user with address:', address);
@@ -43,7 +43,7 @@ export default function HomePage() {
     } finally {
       setIsSaving(false);
     }
-  };
+  }, []);
 
   const projects = [
     { id: 1, title: 'Explore', link: '/projects/zora-explore' },
